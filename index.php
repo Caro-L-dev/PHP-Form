@@ -2,11 +2,21 @@
 /* First-reading on the page, labels are empty */
     $firstname = $name = $email = $phone = $message = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $firstname = $_POST["firstname"];
-        $name = $_POST["name"];
-        $email = $_POST["email"];
-        $phone = $_POST["phone"];
-        $message = $_POST["message"];
+        $firstname = verifyInput($_POST["firstname"]);
+        $name = verifyInput ($_POST["name"]);
+        $email = verifyInput ($_POST["email"]);
+        $phone = verifyInput ($_POST["phone"]);
+        $message = verifyInput ($_POST["message"]);
+    }
+
+    function verifyInput($var) {
+        // trim() function removes whitespace and other predefined characters from both sides of a string.
+        // stripslashes() function removes backslashes added by the addslashes() function.
+        // htmlspecialchars() function converts some predefined characters to HTML entities.
+        $var = trim($var);
+        $var = stripslashes($var);
+        $var = htmlspecialchars($var);
+        return $var;
     }
 ?>
 
@@ -34,7 +44,8 @@
         <div class="form-container">
             <div class="cases">
                 <!-- Second reading, when we clic on submit button : the page return the if condition -->
-                <form id="contact-form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" role="form">
+                <!-- htmlspecialchars can protects against xss flaws-->
+                <form id="contact-form" method="post" action="<?php echo htmlspecialchars ($_SERVER['PHP_SELF']); ?>" role="form">
                   
                         <div class="form-element">
                             <label for="firstname">Prénom <span class="important-infos">*</span></label>
