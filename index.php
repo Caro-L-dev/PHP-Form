@@ -23,8 +23,21 @@
             $messageError = "Que veux tu me dire ?";
         }
 
-        
+        if(!isEmail($email)) {
+            $emailError = "T'essaies de me rouler ? Ce n'est pas un email ça !";
+        }
 
+        if(!isPhone($phone)) {
+            $phoneError = " Que des chiffres, stp ...";
+        }
+    }
+
+    function isPhone($var) {
+        return preg_match("/^[0-9]*$/", $var);
+    }
+
+    function isEmail($var) {
+        return filter_var($var, FILTER_VALIDATE_EMAIL);
     }
 
     function verifyInput($var) {
@@ -85,19 +98,19 @@
                             <label for="email">Email <span class="important-infos">*</span></label>
                             <input type="email"  id="email" name="email" class="form-control" placeholder="Votre email"
                             value="<?php echo $email; ?>">
-                            <p class="comments"></p>
+                            <p class="comments"><?php echo $emailError; ?></p>
                         </div>
     
                         <div class="form-element">
                             <label for="phone">Téléphone <span class="important-infos"></span></label>
                             <input type="tel" id="phone" name="phone" class="form-control" placeholder="Votre téléphone"
                             value="<?php echo $phone; ?>">
-                            <p class="comments"></p>
+                            <p class="comments"><?php echo $phoneError; ?></p>
                         </div>
  
                     <div class="form-element-message">
                         <label for="message">Message <span class="important-infos">*</span></label>
-                        <textarea id="message" nam="message" class="form-control" placeholder="Votre message"><?php echo $message; ?></textarea>
+                        <textarea id="message" name="message" class="form-control" placeholder="Votre message"><?php echo $message; ?></textarea>
                         <p class="comments"><?php echo $messageError; ?></p>
                     </div>
 
