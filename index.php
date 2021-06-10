@@ -2,6 +2,7 @@
 /* First-reading on the page, labels are empty */
     $firstname = $name = $email = $phone = $message = "";
     $firstnameError = $nameError = $emailError = $phoneError = $messageError = "";
+    $isSuccess = false;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $firstname = verifyInput($_POST["firstname"]);
@@ -9,26 +10,36 @@
         $email = verifyInput ($_POST["email"]);
         $phone = verifyInput ($_POST["phone"]);
         $message = verifyInput ($_POST["message"]);
+        $isSuccess = true;
 
         /* Server-side validation with error messages */
         if(empty($firstname)) {
             $firstnameError = "Je veux connaitre ton prénom !";
+            $isSuccess = false;
         }
 
         if(empty($name)) {
             $nameError = "Ton nom m'intéresse aussi, tu ne t'échapperas pas !";
+            $isSuccess = false;
         }
 
         if(empty($message)) {
             $messageError = "Que veux tu me dire ?";
+            $isSuccess = false;
         }
 
         if(!isEmail($email)) {
             $emailError = "T'essaies de me rouler ? Ce n'est pas un email ça !";
+            $isSuccess = false;
         }
 
         if(!isPhone($phone)) {
-            $phoneError = " Que des chiffres, stp ...";
+            $phoneError = " Ce que je demande c'est un numéro, pas une lettre ...";
+            $isSuccess = false;
+        }
+
+        if($isSuccess) {
+
         }
     }
 
@@ -121,7 +132,7 @@
                   
                     <input type="submit" class="form-btn" value="Envoyer">
 
-                   <p class="thank-you">Votre message a bien été envoyé.</p>
+                   <p class="thank-you" style="display:<?php if($isSuccess) echo 'block'; else echo 'none'; ?>">Votre message a bien été envoyé.</p>
 
                 </form>
             </div>
