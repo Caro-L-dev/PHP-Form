@@ -3,6 +3,7 @@
     $firstname = $name = $email = $phone = $message = "";
     $firstnameError = $nameError = $emailError = $phoneError = $messageError = "";
     $isSuccess = false;
+    $emailTo = "liardcar@gmail.com";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $firstname = verifyInput($_POST["firstname"]);
@@ -11,35 +12,55 @@
         $phone = verifyInput ($_POST["phone"]);
         $message = verifyInput ($_POST["message"]);
         $isSuccess = true;
+        $emailText= "";
 
         /* Server-side validation with error messages */
         if(empty($firstname)) {
             $firstnameError = "Je veux connaitre ton prénom !";
             $isSuccess = false;
+        } else // \n allows you to go to the line 
+        {
+            $emailText .= "Firstname: $firstname\n";
         }
+           
 
         if(empty($name)) {
             $nameError = "Ton nom m'intéresse aussi, tu ne t'échapperas pas !";
             $isSuccess = false;
-        }
-
-        if(empty($message)) {
-            $messageError = "Que veux tu me dire ?";
-            $isSuccess = false;
+        } else 
+        {
+            $emailText .= "Name: $name\n";
         }
 
         if(!isEmail($email)) {
             $emailError = "T'essaies de me rouler ? Ce n'est pas un email ça !";
             $isSuccess = false;
+        } else 
+        {
+            $emailText .= "Email: $email\n";
         }
 
         if(!isPhone($phone)) {
             $phoneError = " Ce que je demande c'est un numéro, pas une lettre ...";
             $isSuccess = false;
+        } else 
+        {
+            $emailText .= "Phone: $phone\n";
+        }
+
+        if(empty($message)) {
+            $messageError = "Que veux tu me dire ?";
+            $isSuccess = false;
+        } else 
+        {
+            $emailText .= "Message: $message\n";
         }
 
         if($isSuccess) {
-
+            $headers = "From: $firstname $name <$email>\r\nReply-to: $email";
+            mail($emailTo, "Un message de votre site", $emailText, $headers);
+            // When the message is sent, all fields will reset automatically
+            $firstname = $name = $email = $phone = $message = "";
         }
     }
 
